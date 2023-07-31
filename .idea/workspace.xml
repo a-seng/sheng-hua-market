@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fecb66af-2e3e-48ea-bf3d-8a07158c9aca" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Interface" />
+        <option value="Class" />
+        <option value="Enum" />
+      </list>
+    </option>
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="2SeYUik0IOTAzoEgQDDXngoY0ej" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.15039062" />
+    <property name="project.structure.side.proportion" value="0.29963234" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.tian.asenghuamarket.controller.admin" />
+      <recent name="com.tian.asenghuamarket.service.impl" />
+      <recent name="com.tian.asenghuamarket.service" />
+      <recent name="com.tian.asenghuamarket.mapper" />
+      <recent name="com.tian.asenghuamarket.Dto" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AsengHuaMarketApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="aseng-hua-market" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.tian.asenghuamarket.AsengHuaMarketApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fecb66af-2e3e-48ea-bf3d-8a07158c9aca" name="Default Changelist" comment="" />
+      <created>1689508531246</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1689508531246</updated>
+      <workItem from="1689508533321" duration="3242000" />
+      <workItem from="1689583702275" duration="1618000" />
+      <workItem from="1689590575352" duration="10307000" />
+      <workItem from="1689641737476" duration="11831000" />
+      <workItem from="1689675278403" duration="8299000" />
+      <workItem from="1689688169943" duration="2342000" />
+      <workItem from="1689728030891" duration="283000" />
+      <workItem from="1689728367475" duration="15091000" />
+      <workItem from="1689840234008" duration="2386000" />
+      <workItem from="1689901993687" duration="2842000" />
+      <workItem from="1689922588837" duration="9800000" />
+      <workItem from="1689989268638" duration="7874000" />
+      <workItem from="1689997838444" duration="2508000" />
+      <workItem from="1690007813574" duration="1422000" />
+      <workItem from="1690028042337" duration="20359000" />
+      <workItem from="1690445338651" duration="2773000" />
+      <workItem from="1690793842406" duration="15000" />
+      <workItem from="1690805809518" duration="304000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
