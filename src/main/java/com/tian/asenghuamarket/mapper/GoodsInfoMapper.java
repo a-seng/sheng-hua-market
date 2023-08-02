@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GoodsInfoMapper extends BaseMapper<GoodsInfo> {
+    boolean selectByCategoryIdAndName(String goodsName, Long goodsCategoryId);
 }
