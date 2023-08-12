@@ -1,8 +1,11 @@
 package com.tian.asenghuamarket.service;
 
 import com.tian.asenghuamarket.Dto.IndexConfig;
+import com.tian.asenghuamarket.controller.vo.IndexConfigGoodsVO;
 import com.tian.asenghuamarket.util.PageQueryUtil;
 import com.tian.asenghuamarket.util.PageResult;
+
+import java.util.List;
 
 public interface IndexConfigService {
     /**
@@ -25,7 +28,7 @@ public interface IndexConfigService {
      * @param number
      * @return
      */
-    List<NewBeeMallIndexConfigGoodsVO> getConfigGoodsesForIndex(int configType, int number);
+    List<IndexConfigGoodsVO> getConfigGoodsesForIndex(int configType, int number);
 
     Boolean deleteBatch(Long[] ids);
 }

@@ -3,6 +3,7 @@ package com.tian.asenghuamarket.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class NumberUtil {
     public static final Pattern PHONE_PATTERN = Pattern.compile
             ("^((13[0-9])|(14[5,7])|(15[^4,\\D])|(17[0-8])|(18[0-9]))\\d{8}$");
@@ -25,7 +26,7 @@ public class NumberUtil {
      * @param length
      * @return
      */
-     public static int genRandomNum(int length){
+     public static int getRandomNum(int length){
          int num =1 ;
          double random = Math.random();
          if(random<0.1){
@@ -41,9 +42,9 @@ public class NumberUtil {
      * 生成订单流水号
      * @return
      */
-     public static String genOrderNo(){
+     public static String getOrderNo(){
          StringBuilder buffer = new StringBuilder(String.valueOf(System.currentTimeMillis()));
-         int num = genRandomNum(4);
+         int num = getRandomNum(4);
          buffer.append(num);
          return buffer.toString();
      }
