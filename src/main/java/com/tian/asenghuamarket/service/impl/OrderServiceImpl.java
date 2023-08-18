@@ -1,13 +1,11 @@
 package com.tian.asenghuamarket.service.impl;
 
 import ch.qos.logback.core.joran.conditional.ElseAction;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tian.asenghuamarket.Dto.*;
 import com.tian.asenghuamarket.common.*;
 import com.tian.asenghuamarket.config.ProjectConfig;
-import com.tian.asenghuamarket.controller.vo.OrderDetailVO;
-import com.tian.asenghuamarket.controller.vo.OrderItemVO;
-import com.tian.asenghuamarket.controller.vo.ShoppingCartItemVO;
-import com.tian.asenghuamarket.controller.vo.UserVO;
+import com.tian.asenghuamarket.controller.vo.*;
 import com.tian.asenghuamarket.exception.AsengHuaMarketException;
 import com.tian.asenghuamarket.mapper.*;
 import com.tian.asenghuamarket.service.OrderService;
@@ -26,6 +24,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 public class OrderServiceImpl implements OrderService {
 
@@ -337,36 +337,153 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDetailVO getOrderDetailByOrderNo(String orderNo, Long userId) {
-        return null;
+        QueryWrapper<Order> wrapper = new QueryWrapper<>();
+        wrapper.eq("orderNo",orderNo);
+        Order order = orderMapper.selectOne(wrapper);
+        if(order == null){
+            AsengHuaMarketException.fail(ServiceResultEnum.ORDER_NOT_EXIST_ERROR.getResult());
+        }
+        //验证是否当前userId下的订单，否则报错
+        if(!userId.equals(order.getOrderId())){
+            AsengHuaMarketException.fail(ServiceResultEnum.NO_PERMISSION_ERROR.getResult());
+        }
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("orderId",order.getOrderId());
+        List<OrderItem> orderItems = orderItemMapper.selectByMap(map);
+        //获取订单项数据
+        if(CollectionUtils.isEmpty(orderItems)){
+            AsengHuaMarketException.fail(ServiceResultEnum.ORDER_ITEM_NOT_EXIST_ERROR.getResult());
+        }
+        List<OrderItemVO> orderItemVOS = BeanUtil.copyList(orderItems, OrderItemVO.class);
+        OrderDetailVO orderDetailVO = new OrderDetailVO();
+        BeanUtil.copyProperties(order,orderDetailVO);
+        orderDetailVO.setOrderStatusString(OrderStatusEnum.getOrderStatusEnumByStatus(orderDetailVO.getOrderStatus()).getName());
+        orderDetailVO.setPayStatusString(PayTypeEnum.getPayTypeEnumByType(orderDetailVO.getPayType()).getName());
+        orderDetailVO.setNewBeeMallOrderItemVOS(orderItemVOS);
+        return orderDetailVO;
+
     }
 
     @Override
     public Order getOrderByOrderNo(String orderNo) {
-        return null;
+        QueryWrapper<Order> wrapper = new QueryWrapper<>();
+        wrapper.eq("orderNo",orderNo);
+        return orderMapper.selectOne(wrapper);
     }
 
     @Override
     public PageResult getMyOrders(PageQueryUtil pageUtil) {
-        return null;
+        Integer total = orderMapper.selectCount(new QueryWrapper<>());
+        List<OrderListVO> orderListVOS = new ArrayList<>();
+        if(total>0){
+            List<Order> orders = orderMapper.selectList(new QueryWrapper<>());
+            //数据转换，将实体转成VO
+            orderListVOS = BeanUtil.copyList(orders, OrderListVO.class);
+            //设置订单状态中文显示值
+            for (OrderListVO orderListVO : orderListVOS) {
+                orderListVO.setOrderStatusString(OrderStatusEnum.getOrderStatusEnumByStatus(orderListVO.getOrderStatus()).getName());
+            }
+            List<Long> orderIds = orders.stream().map(Order::getOrderId).collect(Collectors.toList());
+            if(!CollectionUtils.isEmpty(orderIds)){
+                List<OrderItem> orderItems = orderItemMapper.selectBatchIds(orderIds);
+                Map<Long, List<OrderItem>> itemByOrderIdMap = orderItems.stream().collect(groupingBy(OrderItem::getOrderId));
+                for (OrderListVO orderListVO : orderListVOS) {
+                    //封装每个订单列表对象的订单项数据
+                    if(itemByOrderIdMap.containsKey(orderListVO.getOrderId())){
+                        List<OrderItem> orderItems1 = itemByOrderIdMap.get(orderListVO.getOrderId());
+                        //将OrderItem对象列表转换成OrderItemVO对象列表
+                        List<OrderItemVO> orderItemVOS = BeanUtil.copyList(orderItems1, OrderItemVO.class);
+                        orderListVO.setOrderItemVOS(orderItemVOS);
+                    }
+                }
+            }
+        }
+
+        return new PageResult(orderListVOS,total, pageUtil.getLimit(), pageUtil.getPage());
     }
 
     @Override
     public String cancelOrder(String orderNo, Long userId) {
-        return null;
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq("orderNo", orderNo));
+        if(order!=null){
+            //验证是否是当前userId下的订单，否则报错
+            if(!userId.equals(order.getUserId())){
+                AsengHuaMarketException.fail(ServiceResultEnum.NO_PERMISSION_ERROR.getResult());
+            }
+            //订单状态判断
+            if(order.getOrderStatus().intValue()==OrderStatusEnum.ORDER_SUCCESS.getOrderStatus()||
+                order.getOrderStatus().intValue()==OrderStatusEnum.ORDER_CLOSED_BY_MALLUSER.getOrderStatus()||
+                order.getOrderStatus().intValue()==OrderStatusEnum.ORDER_CLOSED_BY_JUDGE.getOrderStatus()||
+                order.getOrderStatus().intValue()==OrderStatusEnum.ORDER_CLOSED_BY_EXPIRED.getOrderStatus()){
+                return ServiceResultEnum.ORDER_STATUS_ERROR.getResult();
+            }
+            if(orderMapper.){
+
+            }else{
+                return ServiceResultEnum.DB_ERROR.getResult();
+            }
+        }
+        return ServiceResultEnum.ORDER_NOT_EXIST_ERROR.getResult();
     }
 
     @Override
     public String finishOrder(String orderNo, Long userId) {
-        return null;
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq("orderNo", orderNo));
+        if(order!=null){
+            //验证是否是当前userId下的订单，否则报错
+            if(!userId.equals(order.getUserId())){
+                return ServiceResultEnum.NO_PERMISSION_ERROR.getResult();
+            }
+            //订单状态判断，非出库状态下不进行修改操作
+            if(order.getOrderStatus().intValue()!=OrderStatusEnum.ORDER_EXPRESS.getOrderStatus()){
+                return ServiceResultEnum.ORDER_STATUS_ERROR.getResult();
+            }
+            order.setOrderStatus(OrderStatusEnum.ORDER_SUCCESS.getOrderStatus());
+            order.setUpdateTime(new Date());
+            if(orderMapper.updateById(order)>0){
+                return ServiceResultEnum.SUCCESS.getResult();
+            }else {
+                return ServiceResultEnum.DB_ERROR.getResult();
+            }
+        }
+
+        return ServiceResultEnum.ORDER_NOT_EXIST_ERROR.getResult();
     }
 
     @Override
     public String paySuccess(String orderNo, int payType) {
-        return null;
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq("orderNo", orderNo));
+        if(order==null){
+            return ServiceResultEnum.ORDER_NOT_EXIST_ERROR.getResult();
+        }
+        //订单状态判断，废待支付状态下不进行修改操作
+        if(order.getOrderStatus().intValue()!=OrderStatusEnum.ORDER_PRE_PAY.getOrderStatus()){
+            return ServiceResultEnum.ORDER_STATUS_ERROR.getResult();
+        }
+        order.setOrderStatus(OrderStatusEnum.ORDER_PAID.getOrderStatus());
+        order.setPayType(payType);
+        order.setPayTime(new Date());
+        order.setUpdateTime(new Date());
+        if(orderMapper.updateById(order)<=0){
+            return ServiceResultEnum.DB_ERROR.getResult();
+        }
+        taskService.removeTask(new OrderUnPaidTask(order.getOrderId()));
+        return ServiceResultEnum.SUCCESS.getResult();
+
     }
 
     @Override
     public List<OrderItemVO> getOrderItems(Long id) {
+        Order order = orderMapper.selectById(id);
+        if(order!=null){
+            List<OrderItem> orderItems = orderItemMapper.selectList(new QueryWrapper<OrderItem>().eq("orderId", order.getOrderId()));
+            //获取订单项数据
+            if(!CollectionUtils.isEmpty(orderItems)){
+                return BeanUtil.copyList(orderItems,OrderItemVO.class)
+            }
+
+
+        }
         return null;
     }
 }

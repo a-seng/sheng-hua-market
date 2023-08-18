@@ -32,6 +32,6 @@ public class OrderListVO implements Serializable {
 
     private Date createTime;
 
-    private List<OrderItemVO> newBeeMallOrderItemVOS;
+    private List<OrderItemVO> OrderItemVOS;
 
 }
