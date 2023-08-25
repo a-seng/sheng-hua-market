@@ -481,8 +481,6 @@ public class OrderServiceImpl implements OrderService {
             if(!CollectionUtils.isEmpty(orderItems)){
                 return BeanUtil.copyList(orderItems,OrderItemVO.class)
             }
-
-
         }
         return null;
     }

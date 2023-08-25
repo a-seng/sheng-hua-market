@@ -103,7 +103,7 @@ public class RedisCache {
      * @param unit
      * @return
      */
-    private boolean expire(String key, long timeout, TimeUnit unit) {
+    public boolean expire(String key, long timeout, TimeUnit unit) {
         return redisTemplate.expire(key, timeout, unit);
     }
 
